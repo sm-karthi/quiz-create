@@ -1,0 +1,49 @@
+import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
+
+function HandleIcon() {
+    const location = useLocation()
+
+
+
+    let iconSvg = (
+        <svg
+            className="w-4 h-4"
+            viewBox="0 0 122.88 84.61"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path d="M108.02,8.62h-8.18v23.59h8.18c1.76,0,3.36-0.72,4.52-1.89c0.06-0.05,0.12-0.11,0.17-0.16
+        c1.06-1.15,1.71-2.68,1.71-4.36V15.03c0-1.76-0.72-3.36-1.88-4.53C111.38,9.35,109.78,8.62,108.02,8.62z
+        M2.01,72.07h32.42C20.52,65.1,10.91,50.69,10.91,34.15V0h84.74v0.18l12.38,0c4.09,0,7.8,1.67,10.49,4.36
+        c2.69,2.69,4.36,6.4,4.36,10.49V25.8c0,3.95-1.57,7.56-4.11,10.23c-0.08,0.1-0.16,0.19-0.25,0.27c-2.69,2.69-6.4,4.36-10.49,4.36
+        l-12.4,0c-0.16,0-0.31-0.01-0.47-0.03C93.02,54.4,84.19,66.02,72.13,72.07h34.73c1.11,0,2.02,0.91,2.02,2.01v8.51
+        c0,1.11-0.91,2.02-2.02,2.02H2.01C0.91,84.61,0,83.7,0,82.59v-8.51C0,72.97,0.9,72.07,2.01,72.07z" />
+        </svg>
+    )
+
+    return (
+        <div className="fixed right-2 top-[44%] bg-[#4d4d4d] flex flex-col">
+
+            <Link to="/">
+
+                <div className={`${location.pathname === '/' ? 'bg-blue-600' : 'bg-[#4d4d4d] '} hover:bg-blue-500 text-white transition duration-150 p-3 flex items-center justify-center`}>{iconSvg}</div>
+
+            </Link>
+
+            <Link to="/question-msq">
+
+            <div className={`${location.pathname === '/question-msq' ? 'bg-blue-600' : 'bg-[#4d4d4d] '} hover:bg-blue-500 text-white transition duration-150 p-3 flex items-center justify-center`}>{iconSvg}</div>
+
+            </Link>
+
+            <Link to="/question-ntq">
+
+                <div className={`${location.pathname === '/question-ntq' ? 'bg-blue-600' : 'bg-[#4d4d4d] '} hover:bg-blue-500 text-white transition duration-150 p-3 flex items-center justify-center`}>{iconSvg}</div>
+            </Link>
+
+        </div>
+    )
+}
+
+export default HandleIcon

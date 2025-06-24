@@ -1,0 +1,31 @@
+[
+    {
+        "question": "",
+        "subject": "",
+        "topic": "",
+        "options": [
+            {
+                "option": "",
+                "mark": "",
+                "isCorrect": false
+            },
+            {
+                "option": "",
+                "mark": "",
+                "isCorrect": false
+            },
+            {
+                "option": "",
+                "mark": "",
+                "isCorrect": false
+            },
+            {
+                "option": "",
+                "mark": "",
+                "isCorrect": false
+            }
+        ],
+        "explanation": "",
+        "tags": []
+    }
+]
