@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useFormik } from 'formik'
 import React from 'react'
 
@@ -89,11 +90,21 @@ function Mcq() {
 
             return errors;
         },
-        onSubmit: (values) => {
+        onSubmit: async (values, { resetForm }) => {
 
             if (values.options.some(obj => obj.isCorrect === true)) {
-                alert("Form submitted successfully")
-                console.log(values);
+
+                try {
+                    await axios.post("https://6850f0628612b47a2c07fce0.mockapi.io/questions", values)
+                    alert("Form submitted successfully")
+                    resetForm();
+
+                    console.log(values);
+
+                } catch (error) {
+                    alert("Something went wrong")
+                }
+
             }
             else {
                 alert("Please choose correct answer")
