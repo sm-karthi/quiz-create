@@ -5,10 +5,19 @@ import Mcq from './Mcq'
 import HandleIcon from './HandleIcon'
 import Msq from './Msq'
 import Ntq from './Ntq'
+import ImageUploader from './ImageUploader'
 
 function question() {
 
     let [selectedComponent, setSelectComponent] = useState('Mcq')
+    let [uploadedImages, setUploadedImages] = useState([]);
+    let [showImageUploader, setShowImageUploader] = useState(false);
+
+    let handleImageClose = () => {
+        setUploadedImages([]);
+        setShowImageUploader(false);
+    };
+
 
     let subjects = {
         Programming: ["JavaScript", "Java", "Python"],
@@ -164,10 +173,32 @@ function question() {
 
                 <div className="flex flex-col space-y-3">
 
-                    <button className='border-2 border-gray-400 rounded py-1 font-semibold text-gray-600 hover:bg-gray-100'>Add image +</button>
+                    {!showImageUploader && uploadedImages.length === 0 ? (
 
-                    <button className='border-2 border-gray-400 rounded py-1 font-semibold text-gray-600 hover:bg-gray-100'>Add code +</button>
+                        <button
+                            type="button"
+                            onClick={() => setShowImageUploader(true)}
+                            className="border-2 border-gray-400 rounded py-1 font-semibold text-gray-600 hover:bg-gray-100">
+                            Add image +
+                        </button>
+
+                    ) : null}
+
+
+                    {showImageUploader ? (
+                        <ImageUploader images={uploadedImages} setImages={setUploadedImages}
+                            onClose={handleImageClose} />
+                    ) : null}
+
+
+                    <button
+                        type="button"
+                        className="border-2 border-gray-400 rounded py-1 font-semibold text-gray-600 hover:bg-gray-100">
+                        Add code +
+                    </button>
+                    
                 </div>
+
 
                 <div className="flex md:gap-5 gap-2 flex-col md:flex-row">
 
