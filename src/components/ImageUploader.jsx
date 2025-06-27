@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-function ImageUploader({ images, setImages, onClose }) {
+function ImageUploader({ images, setImages, onClose, setFieldValue  }) {
 
 
     const onDrop = useCallback((acceptedFiles) => {
@@ -11,7 +11,11 @@ function ImageUploader({ images, setImages, onClose }) {
         }));
 
         setImages(imageList);
-    }, []);
+
+        
+            setFieldValue('image', imageList[0].image);
+        
+    }, [setFieldValue]);
 
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -29,7 +33,7 @@ function ImageUploader({ images, setImages, onClose }) {
 
                     <input {...getInputProps()} />
 
-                    <p className="text-gray-700">
+                    <p className="text-gray-500">
                         {isDragActive
                             ? 'Drop the files here ...'
                             : "Drag 'n' drop some files here, or click to select files"}

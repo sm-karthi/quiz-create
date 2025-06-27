@@ -1,22 +1,33 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
 import React, { useState } from 'react'
-import Mcq from './Mcq'
+import Mcq from './mcq/Mcq'
 import HandleIcon from './HandleIcon'
-import Msq from './Msq'
-import Ntq from './Ntq'
+import Msq from './msq/Msq'
+import Ntq from './ntq/Ntq'
 import ImageUploader from './ImageUploader'
 
-function question() {
+import Modal from './Modal'
+import McqImg from './mcq/McqImg'
+import MsqImg from './msq/MsqImg';
+
+function Question() {
 
     let [selectedComponent, setSelectComponent] = useState('Mcq')
     let [uploadedImages, setUploadedImages] = useState([]);
     let [showImageUploader, setShowImageUploader] = useState(false);
 
+    const [isCodeModalOpen, setCodeModalOpen] = useState(false);
+
+
     let handleImageClose = () => {
         setUploadedImages([]);
         setShowImageUploader(false);
     };
+
+    let handleCodeClose = () => {
+        setCodeModalOpen(false)
+    }
 
 
     let subjects = {
@@ -25,105 +36,114 @@ function question() {
         Maths: ["Algebra", "Geometry", "Probability"],
     };
 
-    let formik = useFormik({
+
+
+    const formik = useFormik({
         initialValues: {
             question: "",
             subject: "",
             topic: "",
-            options: [
-                {
-                    option: "",
-                    mark: 0,
-                    isCorrect: false
-                },
-                {
-                    option: "",
-                    mark: 0,
-                    isCorrect: false
-                },
-                {
-                    option: "",
-                    mark: 0,
-                    isCorrect: false
-                },
-                {
-                    option: "",
-                    mark: 0,
-                    isCorrect: false
-                }
-            ],
             explanation: "",
             tags: [],
+            code: "// Write your code here",
+            image: "",
+            min: "",
+            max: "",
+            options: [
+                { option: "", mark: 0, isCorrect: false },
+                { option: "", mark: 0, isCorrect: false },
+                { option: "", mark: 0, isCorrect: false },
+                { option: "", mark: 0, isCorrect: false },
+            ],
         },
+
         validate: (values) => {
-            let errors = {};
+            const errors = {};
 
             if (!values.question) {
-                errors.question = 'Please enter the Question';
+                errors.question = "Please enter the Question";
             } else if (values.question.length < 5) {
-                errors.question = 'Please enter valid Question';
+                errors.question = "Please enter valid Question";
             }
 
             if (!values.subject) {
-                errors.subject = 'Please select the Subject';
+                errors.subject = "Please select the Subject";
             }
 
             if (!values.topic) {
-                errors.topic = 'Please select the Topic';
+                errors.topic = "Please select the Topic";
             }
 
             if (!values.explanation) {
-                errors.explanation = 'Please enter the Explanation';
+                errors.explanation = "Please enter the Explanation";
             } else if (values.explanation.length < 10) {
-                errors.explanation = 'Please enter valid Explanation';
+                errors.explanation = "Please enter valid Explanation";
             }
 
             if (values.tags.length === 0) {
-                errors.tags = 'Please enter the Tags';
+                errors.tags = "Please enter the Tags";
             }
 
-            let optionsErrors = values.options.map((item) => {
-                let err = {};
 
-                if (!item.option) {
-                    err.option = 'Please enter the answer';
+            if (selectedComponent === "Ntq") {
+                if (!values.min) {
+                    errors.min = "Please enter minimum value";
+                } else if (isNaN(values.min)) {
+                    errors.min = "Min should be a number";
                 }
 
-                if (!item.mark) {
-                    err.mark = 'Required';
+                if (!values.max) {
+                    errors.max = "Please enter maximum value";
+                } else if (isNaN(values.max)) {
+                    errors.max = "Max should be a number";
                 }
+            }
 
-                return err;
-            });
 
-            if (optionsErrors.some((err) => Object.keys(err).length > 0)) {
-                errors.options = optionsErrors;
+            if (selectedComponent !== "Ntq") {
+                const optionsErrors = values.options.map((item) => {
+                    const err = {};
+
+                    if (!item.option) {
+                        err.option = "Please enter the answer";
+                    }
+
+                    if (!item.mark) {
+                        err.mark = "Required";
+                    }
+
+                    return err;
+                });
+
+                if (optionsErrors.some((err) => Object.keys(err).length > 0)) {
+                    errors.options = optionsErrors;
+                }
             }
 
             return errors;
         },
+
         onSubmit: async (values, { resetForm }) => {
 
-            if (values.options.some((obj) => obj.isCorrect === true)) {
-
+            if (selectedComponent === "Ntq" || values.options.some((obj) => obj.isCorrect === true)) {
                 try {
+                    await axios.post(
+                        "https://6850f0628612b47a2c07fce0.mockapi.io/questions",
+                        values
+                    );
 
-                    await axios.post('https://6850f0628612b47a2c07fce0.mockapi.io/questions', values);
-
-                    alert('Form submitted successfully');
-
+                    alert("Form submitted successfully");
                     resetForm();
-
                     console.log(values);
-
                 } catch (error) {
-                    alert('Something went wrong');
+                    alert("Something went wrong");
                 }
             } else {
-                alert('Please choose correct answer');
+                alert("Please choose correct answer");
             }
         },
     });
+
 
     let optionRow = formik.values.options;
 
@@ -142,6 +162,10 @@ function question() {
         formik.setFieldValue('options', newOptions);
     };
 
+
+    function updateCode(value) {
+        formik.setFieldValue('code', value);
+    }
 
 
     return (
@@ -187,16 +211,21 @@ function question() {
 
                     {showImageUploader ? (
                         <ImageUploader images={uploadedImages} setImages={setUploadedImages}
-                            onClose={handleImageClose} />
+                            onClose={handleImageClose} setFieldValue={formik.setFieldValue} />
                     ) : null}
 
 
                     <button
                         type="button"
-                        className="border-2 border-gray-400 rounded py-1 font-semibold text-gray-600 hover:bg-gray-100">
+                        onClick={() => setCodeModalOpen(true)}
+                        className="border-2 border-gray-400 rounded py-1 font-semibold 
+                        text-gray-600 hover:bg-gray-100">
                         Add code +
                     </button>
-                    
+
+                    <Modal isOpen={isCodeModalOpen} onClose={handleCodeClose} code={formik.values.code}
+                        setCode={updateCode} />
+
                 </div>
 
 
@@ -282,15 +311,31 @@ function question() {
                             removeOptions={removeOptions} />
                     ) : null
                 }
+
                 {
                     selectedComponent === 'Msq' ? (
                         <Msq formik={formik} optionRow={optionRow} setOptionRow={setOptionRow}
                             removeOptions={removeOptions} />
                     ) : null
                 }
+
                 {
                     selectedComponent === 'Ntq' ? (
-                        <Ntq />
+                        <Ntq formik={formik} />
+                    ) : null
+                }
+
+                {
+                    selectedComponent === 'McqImg' ? (
+                        <McqImg formik={formik} optionRow={optionRow} setOptionRow={setOptionRow}
+                            removeOptions={removeOptions}/>
+                    ) : null
+                }
+
+                {
+                    selectedComponent === 'MsqImg' ? (
+                        <MsqImg formik={formik} optionRow={optionRow} setOptionRow={setOptionRow}
+                            removeOptions={removeOptions} />
                     ) : null
                 }
 
@@ -338,7 +383,7 @@ function question() {
 
                 </div>
 
-                <button type='submit' className='bg-blue-500 px-3 py-1 text-sm rounded shadow-md text-white font-semibold hover:bg-blue-700 transition duration-150 w-fit cursor-pointer'>Submit</button>
+                <button type='submit' className='bg-blue-500 px-3 py-1 text-sm rounded shadow-md text-white font-semibold hover:bg-blue-700 transition duration-150 w-fit cursor-pointer' >Submit</button>
 
             </div>
 
@@ -346,4 +391,4 @@ function question() {
     )
 }
 
-export default question
+export default Question
