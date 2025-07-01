@@ -168,6 +168,20 @@ function Question() {
     }
 
 
+
+    let quesName = "";
+
+    if (selectedComponent === "McqImg") {
+        quesName = "Mcq";
+    }
+    else if (selectedComponent === "MsqImg") {
+        quesName = "Msq";
+    }
+    else {
+        quesName = selectedComponent;
+    }
+
+
     return (
 
         <form className='w-full py-10 px-6 lg:px-48' onSubmit={formik.handleSubmit}>
@@ -293,7 +307,7 @@ function Question() {
 
                 <div className="flex justify-between">
 
-                    <h2 className='text-2xl font-bold text-gray-500'>{selectedComponent}</h2>
+                    <h2 className='text-2xl font-bold text-gray-500'>{quesName}</h2>
 
                     {
                         selectedComponent === 'Ntq' ? null : (
@@ -328,7 +342,7 @@ function Question() {
                 {
                     selectedComponent === 'McqImg' ? (
                         <McqImg formik={formik} optionRow={optionRow} setOptionRow={setOptionRow}
-                            removeOptions={removeOptions}/>
+                            removeOptions={removeOptions} />
                     ) : null
                 }
 
