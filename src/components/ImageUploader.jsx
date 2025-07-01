@@ -4,9 +4,9 @@ import { useDropzone } from 'react-dropzone';
 function ImageUploader({ images, setImages, onClose, setFieldValue  }) {
 
 
-    const onDrop = useCallback((acceptedFiles) => {
+    let onDrop = useCallback((acceptedFiles) => {
 
-        const imageList = acceptedFiles.map((file) => ({
+        let imageList = acceptedFiles.map((file) => ({
             image: URL.createObjectURL(file),
         }));
 
@@ -18,7 +18,7 @@ function ImageUploader({ images, setImages, onClose, setFieldValue  }) {
     }, [setFieldValue]);
 
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+    let { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
     return (
         <section className="p-2">

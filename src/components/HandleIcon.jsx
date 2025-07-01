@@ -1,13 +1,33 @@
 import React from 'react'
 import Icons from './Icons'
 
-function HandleIcon({ selectedComponent, setComponent }) {
+function HandleIcon({ selectedComponent, setComponent, formik }) {
+
+    let handleQuesTypeSwitch = (type) => {
+
+        let options = formik.values.options;
+        let hasCorrect = options.some(group => group.isCorrect);
+
+        if (hasCorrect) {
+
+            let confirmSwitch = confirm("Are you sure you want to switch to question?");
+            if (!confirmSwitch) {
+                return;
+            }
+
+            options.forEach(group => group.isCorrect = false);
+        }
+
+        setComponent(type);
+    };
+
+
 
     return (
         <div className="fixed right-2 top-[39%] bg-[#4d4d4d] shadow-md flex flex-col">
 
             <div
-                onClick={() => setComponent('Mcq')}
+                onClick={() => handleQuesTypeSwitch('Mcq')}
                 className={`${selectedComponent === 'Mcq' ? 'bg-blue-600' : 'bg-[#4d4d4d]'} hover:bg-blue-500 text-white transition duration-150 p-3 flex items-center justify-center cursor-pointer`}>
 
                 <Icons />
@@ -15,8 +35,9 @@ function HandleIcon({ selectedComponent, setComponent }) {
             </div>
 
 
+
             <div
-                onClick={() => setComponent('Msq')}
+                onClick={() => handleQuesTypeSwitch('Msq')}
                 className={`${selectedComponent === 'Msq' ? 'bg-blue-600' : 'bg-[#4d4d4d]'} hover:bg-blue-500 text-white transition duration-150 p-3 flex items-center justify-center cursor-pointer`}>
 
                 <Icons />
@@ -25,7 +46,7 @@ function HandleIcon({ selectedComponent, setComponent }) {
 
 
             <div
-                onClick={() => setComponent('Ntq')}
+                onClick={() => handleQuesTypeSwitch('Ntq')}
                 className={`${selectedComponent === 'Ntq' ? 'bg-blue-600' : 'bg-[#4d4d4d]'} hover:bg-blue-500 text-white transition duration-150 p-3 flex items-center justify-center cursor-pointer`}>
 
                 <Icons />
@@ -34,7 +55,7 @@ function HandleIcon({ selectedComponent, setComponent }) {
 
 
             <div
-                onClick={() => setComponent('McqImg')}
+                onClick={() => handleQuesTypeSwitch('McqImg')}
                 className={`${selectedComponent === 'McqImg' ? 'bg-blue-600' : 'bg-[#4d4d4d]'} hover:bg-blue-500 text-white transition duration-150 p-3 flex items-center justify-center cursor-pointer`}>
 
                 <Icons />
@@ -43,7 +64,7 @@ function HandleIcon({ selectedComponent, setComponent }) {
 
 
             <div
-                onClick={() => setComponent('MsqImg')}
+                onClick={() => handleQuesTypeSwitch('MsqImg')}
                 className={`${selectedComponent === 'MsqImg' ? 'bg-blue-600' : 'bg-[#4d4d4d]'} hover:bg-blue-500 text-white transition duration-150 p-3 flex items-center justify-center cursor-pointer`}>
 
                 <Icons />

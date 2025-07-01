@@ -12,7 +12,7 @@ function Ntq({ formik }) {
         <input
           type="text"
           name="min"
-          value={formik.values.min}
+          value={formik.values.min !== undefined ? formik.values.min : ""}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="border-2 border-gray-200 bg-white rounded-md h-10 focus:outline-none px-2 focus:border-blue-500 mt-2"
@@ -37,7 +37,7 @@ function Ntq({ formik }) {
         <input
           type="text"
           name="max"
-          value={formik.values.max}
+          value={formik.values.max !== undefined ? formik.values.max : ""}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="border-2 border-gray-200 bg-white rounded-md h-10 focus:outline-none px-2 focus:border-blue-500 mt-2"

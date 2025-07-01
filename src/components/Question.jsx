@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Mcq from './mcq/Mcq'
 import HandleIcon from './HandleIcon'
 import Msq from './msq/Msq'
@@ -17,7 +17,7 @@ function Question() {
     let [uploadedImages, setUploadedImages] = useState([]);
     let [showImageUploader, setShowImageUploader] = useState(false);
 
-    const [isCodeModalOpen, setCodeModalOpen] = useState(false);
+    let [isCodeModalOpen, setCodeModalOpen] = useState(false);
 
 
     let handleImageClose = () => {
@@ -30,6 +30,7 @@ function Question() {
     }
 
 
+
     let subjects = {
         Programming: ["JavaScript", "Java", "Python"],
         Science: ["Physics", "Chemistry", "Biology"],
@@ -38,27 +39,47 @@ function Question() {
 
 
 
-    const formik = useFormik({
-        initialValues: {
-            question: "",
-            subject: "",
-            topic: "",
-            explanation: "",
-            tags: [],
-            code: "// Write your code here",
-            image: "",
+    let defaultValues = {
+        question: "",
+        subject: "",
+        topic: "",
+        explanation: "",
+        tags: [],
+        code: "// Write your code here",
+        image: "",
+        type: selectedComponent
+    }
+
+    let getInitialValues = selectedComponent === "Ntq"
+        ? {
+            ...defaultValues,
             min: "",
             max: "",
+        }
+        : {
+            ...defaultValues,
             options: [
                 { option: "", mark: 0, isCorrect: false },
                 { option: "", mark: 0, isCorrect: false },
                 { option: "", mark: 0, isCorrect: false },
                 { option: "", mark: 0, isCorrect: false },
             ],
-        },
+        };
+
+
+    useEffect(() => {
+        if (selectedComponent === 'Ntq') {
+            delete formik.values.options
+        }
+    }, [])
+
+
+    let formik = useFormik({
+        initialValues: getInitialValues,
 
         validate: (values) => {
-            const errors = {};
+            let errors = {};
+
 
             if (!values.question) {
                 errors.question = "Please enter the Question";
@@ -101,16 +122,13 @@ function Question() {
 
 
             if (selectedComponent !== "Ntq") {
-                const optionsErrors = values.options.map((item) => {
-                    const err = {};
+                let optionsErrors = values.options.map((item) => {
+                    let err = {};
 
                     if (!item.option) {
                         err.option = "Please enter the answer";
                     }
 
-                    if (!item.mark) {
-                        err.mark = "Required";
-                    }
 
                     return err;
                 });
@@ -182,11 +200,12 @@ function Question() {
     }
 
 
+
     return (
 
         <form className='w-full py-10 px-6 lg:px-48' onSubmit={formik.handleSubmit}>
 
-            <HandleIcon selectedComponent={selectedComponent} setComponent={setSelectComponent} />
+            <HandleIcon selectedComponent={selectedComponent} setComponent={setSelectComponent} formik={formik} />
 
             <div className='flex flex-col space-y-5 '>
 
@@ -258,9 +277,9 @@ function Question() {
 
                             <option value="" disabled>Select Subject</option>
 
-                            {Object.keys(subjects).map((sub) => (
+                            {Object.keys(subjects).map((sub, index) => (
 
-                                <option value={sub} >{sub}</option>
+                                <option key={index} value={sub} >{sub}</option>
 
                             ))}
                         </select>
@@ -287,9 +306,9 @@ function Question() {
 
                             <option value="" disabled>Select Topic</option>
 
-                            {(subjects[formik.values.subject] || []).map((topic) => (
+                            {(subjects[formik.values.subject] || []).map((topic, index) => (
 
-                                <option value={topic} >{topic}</option>
+                                <option key={index} value={topic} >{topic}</option>
 
                             ))}
 
@@ -321,15 +340,13 @@ function Question() {
 
                 {
                     selectedComponent === 'Mcq' ? (
-                        <Mcq formik={formik} optionRow={optionRow} setOptionRow={setOptionRow}
-                            removeOptions={removeOptions} />
+                        <Mcq formik={formik} setOptionRow={setOptionRow} removeOptions={removeOptions} />
                     ) : null
                 }
 
                 {
                     selectedComponent === 'Msq' ? (
-                        <Msq formik={formik} optionRow={optionRow} setOptionRow={setOptionRow}
-                            removeOptions={removeOptions} />
+                        <Msq formik={formik} setOptionRow={setOptionRow} removeOptions={removeOptions} />
                     ) : null
                 }
 
@@ -341,15 +358,13 @@ function Question() {
 
                 {
                     selectedComponent === 'McqImg' ? (
-                        <McqImg formik={formik} optionRow={optionRow} setOptionRow={setOptionRow}
-                            removeOptions={removeOptions} />
+                        <McqImg formik={formik} setOptionRow={setOptionRow} removeOptions={removeOptions} />
                     ) : null
                 }
 
                 {
                     selectedComponent === 'MsqImg' ? (
-                        <MsqImg formik={formik} optionRow={optionRow} setOptionRow={setOptionRow}
-                            removeOptions={removeOptions} />
+                        <MsqImg formik={formik} setOptionRow={setOptionRow} removeOptions={removeOptions} />
                     ) : null
                 }
 
@@ -397,7 +412,7 @@ function Question() {
 
                 </div>
 
-                <button type='submit' className='bg-blue-500 px-3 py-1 text-sm rounded shadow-md text-white font-semibold hover:bg-blue-700 transition duration-150 w-fit cursor-pointer' >Submit</button>
+                <button type="submit" className='bg-blue-500 px-3 py-1 text-sm rounded shadow-md text-white font-semibold hover:bg-blue-700 transition duration-150 w-fit cursor-pointer' >Submit</button>
 
             </div>
 

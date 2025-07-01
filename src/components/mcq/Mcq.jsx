@@ -1,9 +1,10 @@
 
-function Mcq({ formik, optionRow, setOptionRow, removeOptions }) {
+function Mcq({ formik, setOptionRow, removeOptions }) {
 
+    let optionRow = [...formik.values.options]
 
     let handleOptionsChange = (index, field, value) => {
-        let updated = [...optionRow];
+        let updated = [...formik.values.options];
 
         if (field === "isCorrect") {
 
@@ -38,7 +39,7 @@ function Mcq({ formik, optionRow, setOptionRow, removeOptions }) {
             {
                 optionRow.map((group, index) => (
 
-                    <div className="flex flex-col mt-4 w-full md:w-[49%]">
+                    <div key={index} className="flex flex-col mt-4 w-full md:w-[49%]">
 
                         <div className="flex gap-3">
 
@@ -105,21 +106,12 @@ function Mcq({ formik, optionRow, setOptionRow, removeOptions }) {
                                 <input
                                     type="text"
                                     name={`options[${index}].mark`}
-                                    value={group.mark}
+                                    value={`${group.isCorrect ? 10 : 0}`}
                                     onChange={(e) => handleOptionsChange(index, 'mark', e.target.value)}
-                                    onBlur={formik.handleBlur}
-                                    className='border-2 border-gray-200 bg-white rounded-md h-10 focus:outline-none px-2 focus:border-blue-500 mt-2' />
+                                    className='border-2 border-gray-200 bg-white rounded-md h-10 focus:outline-none px-2 focus:border-blue-500 mt-2'
+                                />
 
-                                {formik.touched.options &&
-                                    formik.touched.options[index] &&
-                                    formik.touched.options[index].mark &&
-                                    formik.errors.options &&
-                                    formik.errors.options[index] &&
-                                    formik.errors.options[index].mark ? (
-                                    <span className='text-red-500 font-semibold mt-1'>{formik.errors.options[index].mark}</span>
-                                ) : null
 
-                                }
 
                             </div>
 
