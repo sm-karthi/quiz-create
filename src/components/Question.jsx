@@ -246,7 +246,7 @@ function Question() {
                             <button
                                 type="button"
                                 onClick={() => setShowImageUploader(true)}
-                                className="border-2 border-gray-400 rounded py-1 font-semibold text-gray-600 hover:bg-gray-100">
+                                className="border-2 border-gray-400 rounded py-1 font-semibold text-gray-600 hover:bg-gray-100 cursor-pointer">
                                 Add image +
                             </button>
 
@@ -267,7 +267,7 @@ function Question() {
                                 type="button"
                                 onClick={() => setCodeOpen(true)}
                                 className="border-2 border-gray-400 rounded py-1 font-semibold 
-                              text-gray-600 hover:bg-gray-100">
+                              text-gray-600 hover:bg-gray-100 cursor-pointer">
                                 Add code +
                             </button>
 
