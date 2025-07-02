@@ -4,22 +4,20 @@ import Icons from './Icons'
 function HandleIcon({ selectedComponent, setComponent, formik }) {
 
     let handleQuesTypeSwitch = (type) => {
-
         let options = formik.values.options;
-        let hasCorrect = options.some(group => group.isCorrect);
+
+        let hasCorrect = Array.isArray(options) && options.some(group => group.isCorrect);
 
         if (hasCorrect) {
-
-            let confirmSwitch = confirm("Are you sure you want to switch to question?");
-            if (!confirmSwitch) {
-                return;
-            }
+            let confirmSwitch = confirm("Are you sure you want to switch the question type?");
+            if (!confirmSwitch) return;
 
             options.forEach(group => group.isCorrect = false);
         }
 
         setComponent(type);
     };
+
 
 
 

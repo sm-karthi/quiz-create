@@ -3,7 +3,8 @@ import { useDropzone } from 'react-dropzone';
 
 function McqImg({ formik, setOptionRow, removeOptions }) {
 
-    let optionRow = [...formik.values.options]
+    let optionRow = Array.isArray(formik.values.options) ? [...formik.values.options] : [];
+
 
     let handleOptionsChange = (index, field, value) => {
         let updated = [...formik.values.options];

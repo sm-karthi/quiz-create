@@ -50,32 +50,30 @@ function Question() {
         type: selectedComponent
     }
 
-    let getInitialValues = selectedComponent === "Ntq"
-        ? {
-            ...defaultValues,
-            min: "",
-            max: "",
+    let getInitialValues = () => {
+        if (selectedComponent === "Ntq") {
+            return {
+                ...defaultValues,
+                min: "",
+                max: "",
+            };
+        } else {
+            return {
+                ...defaultValues,
+                options: [
+                    { option: "", mark: 0, isCorrect: false },
+                    { option: "", mark: 0, isCorrect: false },
+                    { option: "", mark: 0, isCorrect: false },
+                    { option: "", mark: 0, isCorrect: false },
+                ],
+            };
         }
-        : {
-            ...defaultValues,
-            options: [
-                { option: "", mark: 0, isCorrect: false },
-                { option: "", mark: 0, isCorrect: false },
-                { option: "", mark: 0, isCorrect: false },
-                { option: "", mark: 0, isCorrect: false },
-            ],
-        };
+    };
 
-
-    useEffect(() => {
-        if (selectedComponent === 'Ntq') {
-            delete formik.values.options
-        }
-    }, [])
 
 
     let formik = useFormik({
-        initialValues: getInitialValues,
+        initialValues: getInitialValues(),
 
         validate: (values) => {
             let errors = {};
@@ -143,6 +141,12 @@ function Question() {
 
         onSubmit: async (values, { resetForm }) => {
 
+            if (selectedComponent !== "Ntq") {
+                values.options.forEach(opt => {
+                    opt.mark = opt.isCorrect ? 10 : 0;
+                });
+            }
+
             if (selectedComponent === "Ntq" || values.options.some((obj) => obj.isCorrect === true)) {
                 try {
                     await axios.post(
@@ -161,6 +165,12 @@ function Question() {
             }
         },
     });
+
+    useEffect(() => {
+        let newValues = getInitialValues();
+        formik.setValues(newValues);
+    }, [selectedComponent]);
+
 
 
     let optionRow = formik.values.options;
@@ -203,7 +213,7 @@ function Question() {
 
     return (
 
-        <form className='w-full py-10 px-6 lg:px-48' onSubmit={formik.handleSubmit}>
+        <form key={selectedComponent} className='w-full py-10 px-6 lg:px-48' onSubmit={formik.handleSubmit}>
 
             <HandleIcon selectedComponent={selectedComponent} setComponent={setSelectComponent} formik={formik} />
 
