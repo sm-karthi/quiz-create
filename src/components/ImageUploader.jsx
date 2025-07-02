@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-function ImageUploader({ images, setImages, onClose, setFieldValue  }) {
+function ImageUploader({ images, setImages, onClose, setFieldValue }) {
 
 
     let onDrop = useCallback((acceptedFiles) => {
@@ -12,9 +12,9 @@ function ImageUploader({ images, setImages, onClose, setFieldValue  }) {
 
         setImages(imageList);
 
-        
-            setFieldValue('image', imageList[0].image);
-        
+
+        setFieldValue('image', imageList[0].image);
+
     }, [setFieldValue]);
 
 
@@ -25,21 +25,32 @@ function ImageUploader({ images, setImages, onClose, setFieldValue  }) {
 
             {images.length === 0 ? (
 
-                <div
-                    {...getRootProps()}
-                    className={`border-2 p-8 rounded-lg text-center cursor-pointer transition 
+                <div className='flex gap-3'>
+
+                    <div
+                        {...getRootProps()}
+                        className={`border-2 p-8 w-full rounded-lg text-center  cursor-pointer transition 
                            ${isDragActive ? 'border-blue-500 bg-blue-50' :
-                            'border-dashed border-gray-400 hover:bg-gray-100'}`}>
+                                'border-dashed border-gray-400 hover:bg-gray-100'}`}>
 
-                    <input {...getInputProps()} />
+                        <input {...getInputProps()} />
 
-                    <p className="text-gray-500">
-                        {isDragActive
-                            ? 'Drop the files here ...'
-                            : "Drag 'n' drop some files here, or click to select files"}
-                    </p>
+                        <p className="text-gray-500">
+                            {isDragActive
+                                ? 'Drop the files here ...'
+                                : "Drag 'n' drop some files here, or click to select files"}
+                        </p>
+
+                    </div>
+
+                    <button
+                        onClick={onClose}
+                        className="bg-red-500 text-sm rounded-full w-6 h-6 text-white hover:bg-red-700 font-bold cursor-pointer shadow-md">
+                        X
+                    </button>
 
                 </div>
+
 
             ) : (
 

@@ -7,9 +7,9 @@ import Msq from './msq/Msq'
 import Ntq from './ntq/Ntq'
 import ImageUploader from './ImageUploader'
 
-import Modal from './Modal'
 import McqImg from './mcq/McqImg'
 import MsqImg from './msq/MsqImg';
+import CodeEditor from './CodeEditor'
 
 function Question() {
 
@@ -17,7 +17,7 @@ function Question() {
     let [uploadedImages, setUploadedImages] = useState([]);
     let [showImageUploader, setShowImageUploader] = useState(false);
 
-    let [isCodeModalOpen, setCodeModalOpen] = useState(false);
+    let [isCodeOpen, setCodeOpen] = useState(false);
 
 
     let handleImageClose = () => {
@@ -26,7 +26,7 @@ function Question() {
     };
 
     let handleCodeClose = () => {
-        setCodeModalOpen(false)
+        setCodeOpen(false)
     }
 
 
@@ -240,16 +240,18 @@ function Question() {
 
                 <div className="flex flex-col space-y-3">
 
-                    {!showImageUploader && uploadedImages.length === 0 ? (
+                    {
+                        !showImageUploader && uploadedImages.length === 0 ? (
 
-                        <button
-                            type="button"
-                            onClick={() => setShowImageUploader(true)}
-                            className="border-2 border-gray-400 rounded py-1 font-semibold text-gray-600 hover:bg-gray-100">
-                            Add image +
-                        </button>
+                            <button
+                                type="button"
+                                onClick={() => setShowImageUploader(true)}
+                                className="border-2 border-gray-400 rounded py-1 font-semibold text-gray-600 hover:bg-gray-100">
+                                Add image +
+                            </button>
 
-                    ) : null}
+                        ) : null
+                    }
 
 
                     {showImageUploader ? (
@@ -258,16 +260,28 @@ function Question() {
                     ) : null}
 
 
-                    <button
-                        type="button"
-                        onClick={() => setCodeModalOpen(true)}
-                        className="border-2 border-gray-400 rounded py-1 font-semibold 
-                        text-gray-600 hover:bg-gray-100">
-                        Add code +
-                    </button>
+                    {
+                        !isCodeOpen ? (
 
-                    <Modal isOpen={isCodeModalOpen} onClose={handleCodeClose} code={formik.values.code}
-                        setCode={updateCode} />
+                            <button
+                                type="button"
+                                onClick={() => setCodeOpen(true)}
+                                className="border-2 border-gray-400 rounded py-1 font-semibold 
+                              text-gray-600 hover:bg-gray-100">
+                                Add code +
+                            </button>
+
+                        ) : null
+                    }
+
+
+                    {
+                        isCodeOpen ? (
+                            <CodeEditor isOpen={isCodeOpen} onClose={handleCodeClose} code={formik.values.code} setCode={updateCode} />
+                        ) : null
+                    }
+
+
 
                 </div>
 
