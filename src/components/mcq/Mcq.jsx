@@ -102,7 +102,7 @@ function Mcq({ formik, setOptionRow, removeOptions }) {
                             </div>
 
 
-                            <div className="flex flex-col w-16">
+                            <div className="flex flex-col max-w-16">
 
                                 <input
                                     type="text"
