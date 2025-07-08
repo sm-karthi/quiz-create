@@ -139,7 +139,7 @@ function Question() {
             return errors;
         },
 
-        onSubmit: async (values, { resetForm }) => {
+        onSubmit: (values, { resetForm }) => {
 
             if (selectedComponent !== "Ntq") {
                 values.options.forEach(opt => {
@@ -148,18 +148,11 @@ function Question() {
             }
 
             if (selectedComponent === "Ntq" || values.options.some((obj) => obj.isCorrect === true)) {
-                try {
-                    await axios.post(
-                        "https://6850f0628612b47a2c07fce0.mockapi.io/questions",
-                        values
-                    );
 
-                    alert("Form submitted successfully");
-                    resetForm();
-                    console.log(values);
-                } catch (error) {
-                    alert("Something went wrong");
-                }
+                alert("Form submitted successfully");
+                resetForm();
+                console.log(values);
+
             } else {
                 alert("Please choose correct answer");
             }
